@@ -1,4 +1,4 @@
-name: NumPy Compatibility
+name: MindSpore NumPy Compatibility
 
 on:
   workflow_dispatch:
@@ -17,10 +17,6 @@ jobs:
     strategy:
       fail-fast: false
       max-parallel: 2
-      matrix:
-        numpy-version:
-          - "1.26.4"
-          - "2.4.4"
 
     steps:
       - name: Checkout
@@ -42,7 +38,7 @@ jobs:
       - name: Install Xuance with all extras
         run: |
           uv pip install \
-            -e ".[mindspore,tune,mujoco,atari,box2d,minigrid,metadrive,rware,einops]" \
+            -e ".[mindspore,torch,tune,mujoco,atari,box2d,minigrid,metadrive,rware,einops]" \
             mpe2 \
             pytest \
             ruff
@@ -61,7 +57,7 @@ jobs:
 
           print("Python :", sys.version)
           print("NumPy  :", numpy.__version__)
-          print("mindspore:", mindspore.__version__)
+          print("MindSpore:", mindspore.__version__)
           print("Xuance :", xuance.__version__)
           print("Path   :", xuance.__file__)
           PY
