@@ -43,6 +43,7 @@ jobs:
         run: |
           uv pip install \
             -e ".[mindspore,tune,mujoco,atari,box2d,minigrid,metadrive,rware,einops]" \
+            mpe2 \
             pytest \
             ruff
 
