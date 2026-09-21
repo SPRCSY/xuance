@@ -43,7 +43,8 @@ jobs:
             pyyaml \
             "pyglet==1.5.15" \
             pytest \
-            ruff
+            ruff \
+            keras
 
       - name: Show environment
         run: |
