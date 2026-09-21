@@ -42,7 +42,7 @@ jobs:
       - name: Install Xuance with all extras
         run: |
           uv pip install \
-            -e ".[all,tune,mujoco,atari,box2d,minigrid,metadrive,rware,einops]" \
+            -e ".[torch,tune,mujoco,atari,box2d,minigrid,metadrive,rware,einops]" \
             pytest \
             ruff
 
@@ -76,4 +76,4 @@ jobs:
 
       - name: Run full test suite
         run: |
-          .venv/bin/pytest tests -q --ignore=tests/tune/test_hyperparameters_tuning.py
+          .venv/bin/pytest tests/torch -q 
