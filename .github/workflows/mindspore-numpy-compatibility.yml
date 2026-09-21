@@ -33,11 +33,11 @@ jobs:
 
       - name: Install Python
         run: |
-          uv python install 3.12
+          uv python install 3.11
 
       - name: Create environment
         run: |
-          uv venv --python 3.12
+          uv venv --python 3.11
 
       - name: Install Xuance with all extras
         run: |
