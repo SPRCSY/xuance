@@ -44,32 +44,6 @@ jobs:
             pytest \
             ruff
 
-      - name: Inspect Xuance installation
-        run: |
-          echo "=== setup.py numpy requirement ==="
-          grep -n "numpy" setup.py || true
-      
-          echo "=== imported xuance path ==="
-          .venv/bin/python - <<'PY'
-          import xuance
-          from importlib.metadata import requires, distribution
-      
-          print("xuance.__file__ =", xuance.__file__)
-          print("distribution root =", distribution("xuance").locate_file(""))
-      
-          print("requirements:")
-          for req in requires("xuance") or []:
-              if "numpy" in req.lower():
-                  print(req)
-          PY
-      
-          echo "=== installed xuance packages ==="
-          uv pip list | grep -i xuance || true
-            
-      - name: Force NumPy version
-        run: |
-          uv pip install --reinstall "numpy==${{ matrix.numpy-version }}"
-
       - name: Check dependencies
         run: |
           uv pip check
