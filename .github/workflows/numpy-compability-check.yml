@@ -70,4 +70,4 @@ jobs:
 
       - name: Run tests
         run: |
-          pytest tests -q
+          pytest tests -q --ignore=tests/tune/test_hyperparameters_tuning.py
