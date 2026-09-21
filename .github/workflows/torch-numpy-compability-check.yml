@@ -1,4 +1,4 @@
-name: NumPy Compatibility
+name: Torch NumPy Compatibility
 
 on:
   workflow_dispatch:
@@ -7,7 +7,7 @@ on:
       - "xuance/**"
       - "tests/**"
       - "setup.py"
-      - ".github/workflows/numpy-compatibility.yml"
+      - ".github/workflows/torch-numpy-compatibility.yml"
 
 jobs:
   test:
@@ -41,11 +41,34 @@ jobs:
 
       - name: Install Xuance with all extras
         run: |
+          uv pip uninstall xuance
           uv pip install \
             -e ".[torch,tune,mujoco,atari,box2d,minigrid,metadrive,rware,einops]" \
             pytest \
             ruff
 
+      - name: Inspect Xuance installation
+        run: |
+          echo "=== setup.py numpy requirement ==="
+          grep -n "numpy" setup.py || true
+      
+          echo "=== imported xuance path ==="
+          .venv/bin/python - <<'PY'
+          import xuance
+          from importlib.metadata import requires, distribution
+      
+          print("xuance.__file__ =", xuance.__file__)
+          print("distribution root =", distribution("xuance").locate_file(""))
+      
+          print("requirements:")
+          for req in requires("xuance") or []:
+              if "numpy" in req.lower():
+                  print(req)
+          PY
+      
+          echo "=== installed xuance packages ==="
+          uv pip list | grep -i xuance || true
+            
       - name: Force NumPy version
         run: |
           uv pip install --reinstall "numpy==${{ matrix.numpy-version }}"
