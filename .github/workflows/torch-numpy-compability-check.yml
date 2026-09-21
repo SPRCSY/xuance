@@ -44,6 +44,7 @@ jobs:
           uv pip uninstall xuance
           uv pip install \
             -e ".[torch,tune,mujoco,atari,box2d,minigrid,metadrive,rware,einops]" \
+            mpe2 \
             pytest \
             ruff
 
