@@ -1,0 +1,73 @@
+name: NumPy Compatibility
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        numpy-version:
+          - "1.26.4"
+          - "2.5.3"
+
+    env:
+      PYTHONPATH: ${{ github.workspace }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+
+          pip install \
+            "numpy==${{ matrix.numpy-version }}" \
+            "torch>=2,<3" \
+            "gymnasium>=0.28,<1.3" \
+            scipy \
+            tensorboard \
+            pettingzoo \
+            imageio \
+            "moviepy==1.0.3" \
+            opencv-python \
+            pyyaml \
+            "pyglet==1.5.15" \
+            pytest \
+            ruff
+
+      - name: Show environment
+        run: |
+          python - <<'PY'
+          import sys
+          import numpy
+          import torch
+          import xuance
+
+          print("Python :", sys.version)
+          print("NumPy  :", numpy.__version__)
+          print("PyTorch:", torch.__version__)
+          print("Xuance :", xuance.__file__)
+          PY
+
+      - name: Static NumPy compatibility check
+        run: |
+          ruff check xuance \
+            --select NPY201,NPY001,NPY003
+
+      - name: Show test layout
+        run: |
+          find tests -maxdepth 2 -type f | sort | head -100
+
+      - name: Run tests
+        run: |
+          pytest tests -q
